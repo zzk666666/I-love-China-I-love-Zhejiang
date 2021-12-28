@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>2333</title>
+		<style type="text/css">
+			html body{
+				padding: 0;
+				margin: 0;
+				background-color: #000;
+			}
+			.clockStyle{
+				margin: 4rem 0;
+				background-color: #333;
+				color: #0f0;
+				font-size: 8rem;
+				text-align: center;
+				line-height: 12rem;
+				cursor: pointer; 
+			}
+		</style>
+	</head>
+	<body>
+		<div id="myClock" class="clockStyle" title="单击开始时钟，双击暂停时钟！">
+			00:00:00
+		</div>
+		<script type="text/javascript">
+			var clockHandler=null;
+			var clockBox=document.getElementById("myClock");
+			Date.prototype.Format=function(fmt){
+				var o={
+					"M+":this.getMonth()+1,
+					"d+":this.getDate(),
+					"h+":this.getHours(),
+					"m+":this.getMinutes(),
+					"s+":this.getSeconds(),
+					"q+":Math.floor((this.getMonth()+3)/3),
+					"S":this.getMilliseconds()
+				}
+				if(/(y+)/.test(fmt))fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));
+				for(var k in o)
+					if(new RegExp("("+k+")").test(fmt))fmt=fmt.replace(RegExp.$1,(RegExp.$1.length==1)?(o[k]):(("00"+o[k]).substr((""+o[k]).length)));
+				return fmt;
+			}
+			function clockFresh(){
+				var strNow=(new Date()).Format("hh:mm:ss");
+				clockBox.style.color="#0f0";
+				clockBox.innerText=strNow;
+			}
+			function clockStart(){
+				if(!clockHandler){
+					clockHandler=window.setInterval(clockFresh,1000);
+				}
+			}
+			function clockPause(){
+				if(clockHandler){
+					clockBox.style.color="#f00";
+					clearInterval(clockHandler);
+					clockHandler=null;
+				}
+			}
+			window.onload=function(){
+				clockStart();
+			}
+			clockBox.onclick=clockStart;
+			clockBox.ondblclick=clockPause;
+		</script>
+	</body>
+</html>
