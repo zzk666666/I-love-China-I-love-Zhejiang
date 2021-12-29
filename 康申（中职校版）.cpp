@@ -2,9 +2,10 @@
 #include<conio.h>
 #include<windows.h>
 #define HEADER1 "-------------------STUDENT-----------------------------------------------------------------------------------------------------------------\n"//学生 
-#define HEADER2 "      |    number    |    name    |Chinese|Math|English|HTML|Integrated_Network_cabling|SQLSEVER|topnum|   total    |sum|ave    |mici    | \n"//变量（宏定义） 
-#define HEADER3 "|--------|--------|----|----|-----|--------|----|------|----|--------------------------|--------|------|------------|---|-------|--------|" //宏定义制表 
-#define FORMAT "     |  %-10s |%-15s|%4d|%4d|%4d| %4d    |%4d|%4d|\n"//格式化数据类型 
+#define HEADER4 "|学号	|姓名|语文|数学|英语|WEB前端开发|综合网络布线     |数据库| \n"
+#define HEADER2 "|number|name|Chinese|Math|English|HTML|Integrated_Network_cabling|SQLSEVER|topnum|total|sum|ave|mici| \n"//变量（宏定义） 
+#define HEADER3 "|------|----|-------|----|-------|----|--------------------------|---------|----|--------------------------|--------|------|------------|---|-------|--------|" //宏定义制表 
+#define FORMAT"|%-10s|%-15s|%4d|%4d|%4d|%4d|%4d|%4d|\n"//格式化数据类型 
 #define DATA p->data.num,p->data.name,p->data.Chinese,p->data.Math,p->data.English,p->data.HTML,p->data.Integrated_Network_cabling,p->data.SQLSEVER//指针指向数据 
 #define END "-----------------------------------------------------------------------------------------------------------------------------------------------\n"
 using namespace std;
@@ -45,8 +46,8 @@ void menu()
 	struct tm *p;
 	time(&timep);
 	p=gmtime(&timep);
-	gotoxy(10,7);   
-	printf("                     康申学生成绩管理系统 \n");
+	gotoxy(10,0);   
+	printf("                         康申学生成绩管理系统 \n");
 	printf("                          %d-",1900+p->tm_year);      
     printf("%d-",1+p->tm_mon);          
     printf("%d ",p->tm_mday);           
@@ -54,19 +55,19 @@ void menu()
     printf("%d:",p->tm_min);            
     printf("%d\n",p->tm_sec); 
     //呈现菜单 
-	gotoxy(10,8);
+	gotoxy(10,1);
 	printf("*********************************菜单******************************************\n");
-	gotoxy(10,9);
+	gotoxy(10,2);
 	printf("*              1 添加学生成绩                       2 删除学生成绩            *\n");
-	gotoxy(10,10);
+	gotoxy(10,3);
 	printf("*              3 查询                               4 修改                    *\n");
-	gotoxy(10,11);
+	gotoxy(10,4);
 	printf("*              5 插入                               6 统计                    *\n");
-	gotoxy(10,12);
+	gotoxy(10,5);
 	printf("*              7 排序（注意：排序后可能丢失数据）   8 保存                    *\n");
-	gotoxy(10,13);
+	gotoxy(10,6);
 	printf("*              9 显示成绩                           0 退出                    *\n");
-	gotoxy(10,14);
+	gotoxy(10,7);
 	printf("*******************************************************************************\n");
 	
 }
@@ -74,7 +75,7 @@ void menu()
 void printdata(Node *pp)
 {
 	Node *p;
-	p=pp;
+	p=pp; 
 	printf(FORMAT,DATA);	
 } 
 //错误函数
@@ -90,6 +91,7 @@ void Nofind()
 }
 void Disp(Link l)
 {
+	int select; 
 	Node *p;
 	p=l->next;
 	if(!p)
@@ -100,12 +102,18 @@ void Disp(Link l)
 	}
 	printf("\n\n");
 	//printheader();
+	if(p||select==9)
+	{
+		printf(HEADER4);
+		select=NULL; 
+	}
 	while(p)
 	{
 		printdata(p);
 		p=p->next;
 		printf(HEADER3);
 	}
+	Sleep(5000);
 	getchar(); 
 }
 //输入学号 
@@ -241,12 +249,13 @@ void Qur(Link l)
 		return;
 	}
 	system("cls");
-	printf("\n    =====>l 查找学号 =====>2 查找姓名\n");//输入学号或姓名 
+	printf("\n    =====>l 学号查找 =====>2 姓名查找\n");//输入学号或姓名 
 	scanf("%d",&select);
 	if(select==1)
 	{
-		stringinput(searchinput,10,"输入现有学生姓名:");
+		stringinput(searchinput,10,"输入现有学生学号:");
 		p=Locate(l,searchinput,"num");
+		printf(HEADER4);
 		if(p)
 		{
 			//printheader();
@@ -263,6 +272,7 @@ void Qur(Link l)
 	{
 		stringinput(searchinput,15,"输入已有学生姓名:");
 		p=Locate(l,searchinput,"name");
+		printf(HEADER4);
 		if(p)
 		{
 			//printheader();
@@ -527,7 +537,7 @@ void Sort(Link l)
 {
 	Link ll;
 	Node *p,*rr,*s;
-	int i=0;
+	int i=0,select;
 	char ch,key;
 	if(l->next==NULL)
 	{
