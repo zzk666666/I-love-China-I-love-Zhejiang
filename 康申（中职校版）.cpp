@@ -382,7 +382,7 @@ void Modify(Link l)
 		printf("旧成绩（综合网络布线）%d,",p->data.Integrated_Network_cabling);
 		p->data.Integrated_Network_cabling=numberinput("新成绩:[0-100]");
 		printf("旧成绩（数据库）%d,",p->data.SQLSEVER);
-		p->data.SQLSEVER=numberinput("数据库成绩:[0-100]");
+		p->data.SQLSEVER=numberinput("新成绩:[0-100]");
 		p->data.total=p->data.Chinese+p->data.Math+p->data.English+p->data.HTML+p->data.Integrated_Network_cabling+p->data.SQLSEVER;
 		p->data.ave=(float)(p->data.total/6);
 		p->data.topnum=0;
