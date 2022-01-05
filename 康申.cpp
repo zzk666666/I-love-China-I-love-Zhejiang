@@ -1,105 +1,135 @@
 #include<bits/stdc++.h>
 #include<conio.h>
 #include<windows.h>
-#define HEADER1 "-------------------STUDENT----------------------------\n"
-#define HEADER2 "      |    number    |    name    |bikinggrade|swimminggrade|topnum|    total    |sum|ave    |mici    | \n"
-#define HEADER3 "|--------|--------|----|----|----|--------|--------|--------|" 
-#define FORMAT "     |  %-10s |%-15s|%4d|%4d|%4d| %4d    |%.2f |%4d|\n"
-#define DATA p->data.num,p->data.name,p->data.bikinggrade,p->data.swimminggrade,p->data.programminggrade,p->data.topnum
-#define END "----------------------------------------------------------------------------\n"
+#define HEADER1 "-------------------STUDENT-----------------------------------------------------------------------------------------------------------------\n"//学生 
+#define HEADER4 "|学号	|姓名|语文|数学|英语|WEB前端开发|综合网络布线     |数据库| \n"
+#define HEADER2 "|number|name|Chinese|Math|English|HTML|Integrated_Network_cabling|SQLSEVER|topnum|total|sum|ave|mici| \n"//变量（宏定义） 
+#define HEADER3 "|------|----|-------|----|-------|----|--------------------------|---------|----|--------------------------|--------|------|------------|---|-------|--------|" //宏定义制表 
+#define FORMAT"|%-10s|%-15s|%4d|%4d|%4d|%4d|%4d|%4d|\n"//格式化数据类型 
+#define DATA p->data.num,p->data.name,p->data.Chinese,p->data.Math,p->data.English,p->data.HTML,p->data.Integrated_Network_cabling,p->data.SQLSEVER//指针指向数据 
+#define END "-----------------------------------------------------------------------------------------------------------------------------------------------\n"
 using namespace std;
-int saveflag=0;
-typedef struct student
+int saveflag=0;//检测  
+typedef struct student//成绩数据结构体 
 {
 	char num[10],name[10];
-	int bikinggrade,swimminggrade,programminggrade,topnum;
-	int total;
+	int Chinese,Math,English,HTML,Integrated_Network_cabling,SQLSEVER,topnum;
+	long long total;
 	float ave;
 }student;
 typedef struct node{
-	struct student data;
-	struct node *next;
+	struct student data;//数据域 
+	struct node *next;//指针域 
 }Node,*Link;
 int gotoxy(int x,int y)
 { 
-	
+	HANDLE hout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD pos;
+	pos.X=x;
+	pos.Y=y;
+	SetConsoleCursorPosition(hout,pos);
 } 
+//文本颜色 
+void textcolor()
+{
+	HANDLE hout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hout,BACKGROUND_INTENSITY| BACKGROUND_BLUE|FOREGROUND_RED | FOREGROUND_GREEN);
+} 
+//菜单 
 void menu()
 {
+	HANDLE hout;
 	system("cls");
-	//textcolor(10);
+	srand(time(NULL));
+	textcolor();
+	//显示时间 
 	time_t timep;
 	struct tm *p;
 	time(&timep);
-	p=gmtime(&timep);  
-	printf("                     The Students' Grade Management System \n");
-	printf("                          %d-",1900+p->tm_year);      
+	p=gmtime(&timep);
+	gotoxy(10,0);   
+	printf("                         康申学生成绩管理系统 \n");
+	printf("                          	     %d-",1900+p->tm_year);      
     printf("%d-",1+p->tm_mon);          
     printf("%d ",p->tm_mday);           
     printf("%d:",8+p->tm_hour);
     printf("%d:",p->tm_min);            
     printf("%d\n",p->tm_sec); 
+    //呈现菜单 
+	gotoxy(10,2);
+	printf("*********************************菜单******************************************\n");
+	gotoxy(10,3);
+	printf("*              1 添加学生成绩                       2 删除学生成绩            *\n");
+	gotoxy(10,4);
+	printf("*              3 查询                               4 修改                    *\n");
+	gotoxy(10,5);
+	printf("*              5 插入                               6 统计                    *\n");
+	gotoxy(10,6);
+	printf("*              7 排序（注意：排序后可能丢失数据）   8 保存                    *\n");
+	gotoxy(10,7);
+	printf("*              9 显示成绩                           0 退出                    *\n");
 	gotoxy(10,8);
-	printf("*********************************Menu******************************************\n");
-	gotoxy(10,9);
-	printf("*              1 Add Record                   2 Delete Record                 *\n");
-	gotoxy(10,10);
-	printf("*              3 Search record                4 Modify Record                 *\n");
-	gotoxy(10,11);
-	printf("*              5 Insert Record                6 Statistical Record            *\n");
-	gotoxy(10,12);
-	printf("*              7 Sort Record                  8 Save record                   *\n");
-	gotoxy(10,13);
-	printf("*              9 Display Record Data          0 Exit                          *\n");
-	gotoxy(10,14);
-	printf("******************************************************************************\n");
+	printf("*******************************************************************************\n");
 	
 }
+//输出统计数据函数 
 void printdata(Node *pp)
 {
 	Node *p;
-	p=pp;
+	p=pp; 
 	printf(FORMAT,DATA);	
 } 
+//错误函数
 void Wrong()
 {
-	printf("\n\n\n\n\n\n********Error:input has wrong! press any key to continue**********\n");
+	printf("\n\n\n\n\n\n********输入有误，请重新输入。**********\n");
 	getchar();
 }
+//未找到该学生函数 
 void Nofind()
 {
-	printf("\n==========>Not find this student!\n");
+	printf("\n==========>未找到该学生\n");
 }
 void Disp(Link l)
 {
+	int select; 
 	Node *p;
 	p=l->next;
 	if(!p)
 	{
-		printf("\n========>Not student record!\n");
+		printf("\n========>未找到该学生\n");
 		getchar();
+		Sleep(3000); 
 		return;
 	}
 	printf("\n\n");
 	//printheader();
+	if(p||select==9)
+	{
+		printf(HEADER4);
+		select=NULL; 
+	}
 	while(p)
 	{
 		printdata(p);
 		p=p->next;
 		printf(HEADER3);
 	}
+	Sleep(5000);
 	getchar(); 
 }
+//输入学号 
 void stringinput(char *t,int lens,char *notice)
 {
 	char n[255];
 	do{
 		printf(notice);
 		scanf("%s",n);
-		if(strlen(n)>lens)printf("\n exceed the required length!    \n");
+		if(strlen(n)>lens)printf("\n 字符过长！    \n");
 	}while(strlen(n)>lens);
 	strcpy(t,n);
 }
+//输入成绩 
 int numberinput(char *notice)
 {
 	int t=0;
@@ -110,12 +140,13 @@ int numberinput(char *notice)
 		if(t>100||t<0)
 		{
 			t=rand()%41+60;
-			printf("\n score must in [0,100],system just change %d",t);
+			printf("\n 成绩必须在0~100之间%d",t);
 			printf("\n");
 		}
 	}while(t>100||t<0);
 	return t;
 }
+//指向学生成绩 
 Node* Locate(Link l,char findmess[],char nameornum[])
 {
 	Node *r;
@@ -141,6 +172,7 @@ Node* Locate(Link l,char findmess[],char nameornum[])
 	}
 	return 0;
 } 
+//添加学生 
 void Add(Link l)
 {
 	Node *p,*r,*s;
@@ -155,10 +187,10 @@ void Add(Link l)
 	{
 		while(1)
 		{
-			stringinput(num,10,"input number(press '0'return menu):");
+			stringinput(num,10,"输入学号(按0返回):");
 			flag=0;
 			if(strcmp(num,"0")==0)
-			{return;}
+			{Sleep(3000); return;}
 			s=l->next;
 			while(s)
 			{
@@ -172,7 +204,7 @@ void Add(Link l)
 			if(flag==1)
 			{
 				getchar();
-				printf("=====>The number %s isnot existing,try again?(y/n):",num);
+				printf("=====>此学号 %s 已有，重新输入？(y/n):",num);
 				scanf("%c",&ch);
 				if(ch=='y'||ch=='Y')
 				continue;
@@ -182,26 +214,32 @@ void Add(Link l)
 			else
 			{break;}
 		}
-		p=(Node *)malloc(sizeof(Node));
+		p=(Node *)malloc(sizeof(Node));//分配 
 		if(!p)
 		{
-			printf("\n allocate memory failure");
+			printf("\n 分配内存故障");
+			Sleep(3000); 
 			return ;
 		}
 		strcpy(p->data.num,num);
-		stringinput(p->data.name,15,"Name:");
-		p->data.bikinggrade=numberinput("Biking scores[0-100]");
-		p->data.swimminggrade=numberinput("Swimming scores[0-100]");
-		p->data.programminggrade=numberinput("Programminggrade scores[0-100]");
-		p->data.total=p->data.programminggrade+p->data.swimminggrade+p->data.bikinggrade;
-		p->data.ave=(float)(p->data.total/3);
-		p->next=NULL;
+		stringinput(p->data.name,15,"姓名:");
+		p->data.Chinese=numberinput("语文成绩[0-100]");//语文成绩 
+		p->data.Math=numberinput("数学成绩[0-100]");//数学成绩 
+		p->data.English=numberinput("英语成绩[0-100]");//英语成绩 
+		p->data.HTML=numberinput("WEB前端开发成绩[0-100]");//网页制作成绩 
+		p->data.Integrated_Network_cabling=numberinput("综合网络布线成绩[0-100]");//综合网络布线成绩 
+		p->data.SQLSEVER=numberinput("数据库成绩[0-100]");//综合网络布线成绩 
+		p->data.total=p->data.Chinese+p->data.Math+p->data.English+p->data.HTML+p->data.Integrated_Network_cabling+p->data.SQLSEVER;//该生总分 
+		p->data.ave=(float)(p->data.total/6);//平均成绩 
+		p->next=NULL;//空指针 
 		r->next=p;
-		r=p;
+		r=p;//迭代 
 		saveflag=1; 
 	}
-	return;
+	Sleep(3000); 
+	return; 
 }
+//修改学生成绩 
 void Qur(Link l)
 {
 	int select;
@@ -210,23 +248,25 @@ void Qur(Link l)
 	if(!l->next)
 	{
 		system("cls");
-		printf("\n=====>No student record!\n");
+		printf("\n=====>未找到该学生\n");
 		getchar();
+		Sleep(3000); 
 		return;
 	}
 	system("cls");
-	printf("\n    =====>l Search by number =====>2 Search by name\n");
+	printf("\n    =====>l 学号查找 =====>2 姓名查找\n");//输入学号或姓名 
 	scanf("%d",&select);
 	if(select==1)
 	{
-		stringinput(searchinput,10,"input the existing student number:");
+		stringinput(searchinput,10,"输入现有学生学号:");
 		p=Locate(l,searchinput,"num");
+		printf(HEADER4);
 		if(p)
 		{
 			//printheader();
 			printdata(p);
 			printf(END);
-			printf("press any key to return");
+			printf("按任意键返回");
 			getchar();
 		}
 		else
@@ -235,14 +275,15 @@ void Qur(Link l)
 	}
 	else if(select==2)
 	{
-		stringinput(searchinput,15,"input the existing student name:");
+		stringinput(searchinput,15,"输入已有学生姓名:");
 		p=Locate(l,searchinput,"name");
+		printf(HEADER4);
 		if(p)
 		{
 			//printheader();
 			printdata(p);
 			printf(END);
-			printf("press any key to return");
+			printf("按任意键返回");
 			getchar();
 		}
 		else
@@ -261,18 +302,19 @@ void Del(Link l)
 	if(!l->next)
 	{
 		system("cls");
-		printf("\n=====>No student record!\n");
+		printf("\n=====>未找到该学生\n");
 		getchar();
+		Sleep(3000); 
 		return;
 	} 
 	system("cls");
 	Disp(l);
-	printf("\n =====>1 Delete by number =====>2 Delete by name\n");
-	printf("     please choice[1,2]:");
+	printf("\n =====>1 以学号删除 =====>2 以姓名删除\n");
+	printf("     请选择[1,2]:");
 	scanf("%d",&sel);
 	if(sel==1)
 	{
-		stringinput(findmess,10,"input the existing student number:");
+		stringinput(findmess,10,"输入现有学生学号:");
 		p=Locate(l,findmess,"num");
 		if(p)
 		{
@@ -281,7 +323,7 @@ void Del(Link l)
 			r=r->next;
 			r->next=p->next;
 			free(p);
-			printf("\n=====>delete success!\n");
+			printf("\n=====>删除成功！\n");
 			getchar();
 			saveflag=1;
 		}
@@ -291,7 +333,7 @@ void Del(Link l)
 	}
 	else if(sel==2)
 	{
-		stringinput(findmess,15,"input the existing student name");
+		stringinput(findmess,15,"输入现有学生姓名");
 		p=Locate(l,findmess,"name");
 		if(p)
 		{
@@ -300,7 +342,7 @@ void Del(Link l)
 			r=r->next;
 			r->next=p->next;
 			free(p);
-			printf("\n=====>delete success!\n");
+			printf("\n=====>删除成功！\n");
 			getchar();
 			saveflag=1;
 		}
@@ -310,8 +352,10 @@ void Del(Link l)
 	}
 	else
 		Wrong();
+		Sleep(3000); 
 		getchar();
 }
+//修改学生信息 
 void Modify(Link l)
 {
 	Node *p;
@@ -319,37 +363,48 @@ void Modify(Link l)
 	if(!l->next)
 	{
 		system("cls");
-		printf("\n=====>No student record!\n");
+		printf("\n=====>未找到该学生！\n");
 		getchar();
+		Sleep(3000); 
 		return;
 	}
 	system("cls");
-	printf("modity student recorder");
-	Disp(l);
-	stringinput(findness,10,"input the existing student number");
+	printf("修改学生记录");
+	Disp(l);//显示统计结果 
+	stringinput(findness,10,"输入现有学生学号");//输入现有的学生学号 
 	p=Locate(l,findness,"num");
+	//依次修改以往该生成绩 
 	if(p)
 	{
-		printf("Number:%s,\n",p->data.num);
-		printf("Number:%s,",p->data.name);
-		stringinput(p->data.name,15,"input new game:");
-		printf("Biking score:%d",p->data.bikinggrade);
-		p->data.bikinggrade=numberinput("Biking Score:[0-100]:");
-		printf("Swimming score:%d,",p->data.swimminggrade);
-		p->data.swimminggrade=numberinput("Swimminggrade Score:[0-100]");
-		printf("Programming score:%d,",p->data.programminggrade);
-		p->data.total=p->data.bikinggrade+p->data.swimminggrade+p->data.bikinggrade;
-		p->data.ave=(float)(p->data.total/3);
+		printf("学号:%s,\n",p->data.num); 
+		printf("姓名:%s,",p->data.name);
+		stringinput(p->data.name,15,"输入新成绩：");
+		printf("旧成绩（语文）：%d",p->data.Chinese);
+		p->data.Chinese=numberinput("新成绩:[0-100]:");
+		printf("旧成绩（数学）：%d,",p->data.Math);
+		p->data.Math=numberinput("新成绩：[0-100]");
+		printf("旧成绩（英语）：%d,",p->data.English);
+		p->data.English=numberinput("英语：[0-100]");
+		printf("旧成绩（WEB前端开发）%d,",p->data.HTML);
+		p->data.HTML=numberinput("新成绩：[0-100]");
+		printf("旧成绩（综合网络布线）%d,",p->data.Integrated_Network_cabling);
+		p->data.Integrated_Network_cabling=numberinput("新成绩:[0-100]");
+		printf("旧成绩（数据库）%d,",p->data.SQLSEVER);
+		p->data.SQLSEVER=numberinput("数据库成绩:[0-100]");
+		p->data.total=p->data.Chinese+p->data.Math+p->data.English+p->data.HTML+p->data.Integrated_Network_cabling+p->data.SQLSEVER;
+		p->data.ave=(float)(p->data.total/6);
 		p->data.topnum=0;
 		printf("\n=====>modify success!\n");
 		Disp(l);
 		saveflag=1;
 	}
+	//未找到该生 
 	else{
 		Nofind();
 		getchar();
 	}
 }
+//插入已有学生信息 
 void Insert(Link l)
 {
 	Link p,v,newinfo;
@@ -360,7 +415,7 @@ void Insert(Link l)
 	Disp(l);
 	while(1)
 	{
-		stringinput(s,10,"please input insert location after the Number");
+		stringinput(s,10,"请在号码后面输入插入位置");
 		flag=0;
 		v=l->next;
 		while(v)
@@ -377,7 +432,7 @@ void Insert(Link l)
 		else
 		{
 			getchar();
-			printf("\n=====>The number %s is not existing,try again?(y/n):",s);
+			printf("\n=====>学号%s不存在，请重试？(y/n):",s);
 			scanf("%c",&ch);
 			if(ch=='y'||ch=='Y')
 			{continue;}
@@ -385,17 +440,18 @@ void Insert(Link l)
 				{return;} 
 		}		
 	}
-	stringinput(num,10,"input new Number");
+	stringinput(num,10,"输入新学号");
 	v=l->next;
 	while(v)
 	{
 		if(strcmp(v->data.num,num)==0)
 		{
-			printf("=====>Sorry,the new number:'%s' is existing!\n",num);
+			printf("=====>抱歉,新学号%s已存在！\n",num);
 			//printheader();
 			printdata(v);
 			printf("\n");
 			getchar();
+			Sleep(3000); 
 			return;
 		}	
 		v=v->next;
@@ -403,16 +459,21 @@ void Insert(Link l)
 	newinfo=(Node *)malloc(sizeof(Node));
 	if(!newinfo)
 	{
-		printf("\n allocate memory failure");
+		printf("\n 分配内存故障");
+		Sleep(3000); 
 		return ;
 	} 
+	//修改学生信息 
 	strcpy(newinfo->data.num,num);
-	stringinput(newinfo->data.name,15,"Name:");
-	newinfo->data.bikinggrade=numberinput("BIKINGGRADE SCORES[0-100]:");
-	newinfo->data.programminggrade=numberinput("PROGRAMMINGGRADE SCORES[0-100]:");
-	newinfo->data.swimminggrade=numberinput("SWIMMINGGRADE SCORES[0-100]:");
-	newinfo->data.total=newinfo->data.bikinggrade+newinfo->data.programminggrade+newinfo->data.swimminggrade;
-	newinfo->data.ave=(float)(newinfo->data.total/3);
+	stringinput(newinfo->data.name,15,"姓名：");
+	newinfo->data.Chinese=numberinput("语文成绩[0-100]：");
+	newinfo->data.Math=numberinput("数学成绩[0-100]：");
+	newinfo->data.English=numberinput("英语成绩[0-100]：");
+	newinfo->data.HTML=numberinput("WEB前端开发成绩[0-100]：");
+	newinfo->data.Integrated_Network_cabling=numberinput("综合网络布线成绩[0-100]：");
+	newinfo->data.SQLSEVER=numberinput("数据库成绩[0-100]：");
+	newinfo->data.total=newinfo->data.Chinese+newinfo->data.Math+newinfo->data.English+newinfo->data.HTML+newinfo->data.Integrated_Network_cabling+newinfo->data.SQLSEVER;
+	newinfo->data.ave=(float)(newinfo->data.total/6);
 	newinfo->data.topnum=0;
 	newinfo->next=NULL;
 	saveflag=1;
@@ -423,6 +484,7 @@ void Insert(Link l)
 		{
 			newinfo->next=p->next;
 			p->next=newinfo;
+			Sleep(3000); 
 			break;
 		}
 		p=p->next;
@@ -431,60 +493,76 @@ void Insert(Link l)
 	printf("\n\n");
 	getchar();
 }
+//统计学生成绩 
 void Tongji(Link l)
 {
-	Node *pb,*pp,*ps,*pt;
+	Node *pt,*pc,*pm,*pe,*ph,*pinc,*psql;
 	Node *r=l->next;
-	int countb=0,countp=0,counts=0;
+	int countc=0,countm=0,counte=0,counth=0,countinc=0,countsql=0;
 	if(!r)
 	{
 		system("cls");
-		printf("\n=====>Not student record!\n");
+		printf("\n=====>未找到该生记录\n");
+		Sleep(3000);
 		getchar();
 		return ;
 	}
 	system("cls");
 	Disp(l);
-	pb=pp=ps=r;
+	pc=pm=pe=ph=pinc=psql=pt=r;
 	while(r)
 	{
-		if(r->data.bikinggrade<60)countb++;
-		if(r->data.programminggrade<60)countp++;
-		if(r->data.swimminggrade<60)counts++;
-		if(r->data.bikinggrade>=pb->data.bikinggrade)pb=r;
-		if(r->data.programminggrade>=pp->data.programminggrade)pp=r;
-		if(r->data.swimminggrade>=pb->data.swimminggrade)ps=r;
+		if(r->data.Chinese<60)countc++;
+		if(r->data.Math<60)countm++;
+		if(r->data.English<60)counte++;
+		if(r->data.HTML<60)counth++;
+		if(r->data.Integrated_Network_cabling<60)countinc++;
+		if(r->data.Chinese>=pc->data.Chinese)pc=r;
+		if(r->data.Math>=pm->data.Math)pm=r;
+		if(r->data.English>=pe->data.English)pe=r;
+		if(r->data.HTML>=pm->data.HTML)ph=r;
+		if(r->data.Integrated_Network_cabling>=pinc->data.Integrated_Network_cabling)pinc=r;
+		if(r->data.SQLSEVER>=psql->data.SQLSEVER)psql=r;
 		r=r->next;
 	}
-	printf("--------------------the Statistics result--------------------\n");
-	printf("BIKINGGRADE<60:%d (ren)\n",countb);
-	printf("PROGRAMMINGGRADE<60:%d (ren)\n",countp);
-	printf("SWIMMINGGRADE<60:%d (ren)\n",counts);
+	printf("--------------------不及格--------------------\n");
+	printf("语文成绩<60：%d (人)\n",countc);
+	printf("数学成绩<60：%d (人)\n",countm);
+	printf("英语成绩<60：%d (人)\n",counte);
+	printf("WEB前端开发成绩<60：%d (人)\n",counth);
+	printf("综合网络布线<60：%d (人)\n",countinc);
+	printf("数据库<60：%d (人)\n",countsql);
 	printf("-------------------------------------------------------------\n");
-	printf("The highest student by total    scores    name:%s totoal scores:%d\n",pt->data.name,pt->data.total);
-	printf("The highest student by SWIMMINGGRADE    scores    name:%s SWIMMINGGRADE scores:%d\n",ps->data.name,ps->data.total);
-	printf("The highest student by PROGRAMMINGGRADE    scores    name:%s PROGRAMMINGGRADE scores:%d\n",pp->data.name,pp->data.total);
-	printf("The highest student by BIKINGGRADE    scores    name:%s BIKINGGRADE scores:%d\n",pb->data.name,pb->data.total);
-	printf("\n\n press any key to return");
+	printf("最高分（总分）：%s 总分成绩：%d\n",pt->data.name,pt->data.total);
+	printf("最高分（语文）：%s 语文成绩：%d\n",pc->data.name,pc->data.Chinese);
+	printf("最高分（数学）：%s 数学成绩：%d\n",pm->data.name,pm->data.Math);
+	printf("最高分（英语）：%s 英语成绩：%d\n",pe->data.name,pe->data.English);
+	printf("最高分（WEB前端开发）：%s WEB前端开发成绩：%d\n",ph->data.name,ph->data.HTML);
+	printf("最高分（综合网络布线）：%s 综合网络布线成绩：%d\n",pinc->data.name,pinc->data.Integrated_Network_cabling);
+	printf("最高分（数据库）：%s 数据库:%d\n",pinc->data.name,pinc->data.SQLSEVER);
+	printf("\n\n 按任意键返回");
 	getchar();
 }
+//学生排序 
 void Sort(Link l)
 {
 	Link ll;
 	Node *p,*rr,*s;
-	int i=0;
+	int i=0,select;
 	char ch,key;
 	if(l->next==NULL)
 	{
 		system("cls");
-		printf("\n=====>Not student record!\n");
+		printf("\n=====>未找到该学生记录\n");
 		getchar();
+		Sleep(3000); 
 		return ;
 	}
 	ll=(Node*)malloc(sizeof(Node));
 	if(!ll)
 	{
-		printf("\n allocate memory failure");
+		printf("\n 分配内存故障");
+		Sleep(3000); 
 		return;	
 	} 
 	ll->next=NULL;
@@ -496,7 +574,7 @@ void Sort(Link l)
 		s=(Node*)malloc(sizeof(Node));
 		if(!s)
 		{
-			printf("\n allocate memory failure");
+			printf("\n 分配内存故障");
 			return;
 			s->data=p->data;
 			s->next=NULL;
@@ -517,31 +595,32 @@ void Sort(Link l)
 		while(p!=NULL)
 		{
 			i++;
-			p->data.total=i;
+			p->data.topnum=i;
 			p=p->next;
 		}
 		Disp(l);
 		saveflag=1;
-		printf("\n	=====>sort complete!\n");
+		printf("\n	=====>排序成功\n");
 	}
 }
-
+//保存 
 void Save(Link l)
 {
 	FILE* fp;
 	Node *p;
 	int count=0;
-	fp=fopen("c:\\SPORT.txt","wb");
+	fp=fopen("c:\\RESULT.txt","wb");//成绩结果保存地址 
 	if(fp==NULL)
 	{
-		printf("\n=====>open file error!\n");
+		printf("\n=====>打开文件失败\n");
 		getchar();
+		Sleep(3000); 
 		return ;
 	}
 	p=l->next;
 	while(p)
 	{
-		if(fwrite(p,sizeof(Node),1,fp)==1)
+		if(fwrite(p,sizeof(Node),1,fp)==1)//写入成功 
 		{
 			p=p->next;
 			count++;
@@ -555,14 +634,14 @@ void Save(Link l)
 	if(count>0)
 	{
 		getchar();
-		printf("\n\n\n\n\n=====>save file complete,total saved's record number is:%d\n",count);
+		printf("\n\n\n\n\n=====>文件保存成功\n");
 		getchar();
 		saveflag=0;
 	}
 	else
 	{
 		system("cls");
-		printf("the current link is empty,no student record is saved!\n");
+		printf("当前数据为空,没有学生记录被保存。\n");
 		getchar();	
 	}	
 	fclose(fp);
@@ -578,15 +657,15 @@ int main()
 	l=(Node*)malloc(sizeof(Node));
 	if(!l)
 	{
-		printf("\n allocate memory failure");
+		printf("\n 分配内存故障");
 		return 0;
 	}
 	l->next=NULL;
 	r=l;
-	fp=fopen("C:\\SPORT","ab+");
+	fp=fopen("C:\\RESULT","ab+");
 	if(fp==NULL)
 	{
-		printf("=====>can open file!\n");
+		printf("=====>可以打开文件\n");
 		exit(0);
 	}
 	while(!feof(fp))
@@ -594,10 +673,10 @@ int main()
 		p=(Node*)malloc(sizeof(Node));
 		if(!p)
 		{
-			printf("memory malloc failure!\n");
-			exit(0);
+			printf("内存分配故障！\n");
+			exit(0);//错误退出 
 		}
-		if(fread(p,sizeof(Node),1,fp)==1)
+		if(fread(p,sizeof(Node),1,fp)==1)//读取成功 
 		{
 			p->next=NULL;
 			r->next=p;
@@ -606,26 +685,26 @@ int main()
 		}
 	}
 	fclose(fp);
-	printf("\n=====>open file success,the total records number is:%d.\n",count);
+	printf("\n=====>文件保存成功\n");
 	menu();
 	while(1)
 	{
 		system("cls");
 		menu();
 		p=r;
-		printf("\n			Please Enter your choice(0~9):");
-		scanf("%d",&select);
+		printf("\n			请选择(0~9):");
+		scanf("%d",&select);//选择功能 
 		if(select==0)
 		{
 			if(saveflag=1)
 			{
 				getchar();
-				printf("\n=====>Whether save the modified record to file?(y/n):");
+				printf("\n=====>是否保存修改记录去文件(y/n):");
 				scanf("%c",&ch);
 				if(ch=='y'||ch=='Y')
-					Save(l);
+					Save(l); 
 			}
-			printf("=====>thank you for useness!");
+			printf("=====>感谢为您服务！");
 			getchar();
 			break;
 		}
