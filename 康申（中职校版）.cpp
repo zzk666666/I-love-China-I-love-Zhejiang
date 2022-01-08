@@ -508,7 +508,7 @@ void Tongji(Link l)
 		if(r->data.Chinese>=pc->data.Chinese)pc=r;
 		if(r->data.Math>=pm->data.Math)pm=r;
 		if(r->data.English>=pe->data.English)pe=r;
-		if(r->data.HTML>=pm->data.HTML)ph=r;
+		if(r->data.HTML>=ph->data.HTML)ph=r;
 		if(r->data.Integrated_Network_cabling>=pinc->data.Integrated_Network_cabling)pinc=r;
 		if(r->data.SQLSEVER>=psql->data.SQLSEVER)psql=r;
 		r=r->next;
