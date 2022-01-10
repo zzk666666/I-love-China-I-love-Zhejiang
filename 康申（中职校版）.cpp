@@ -659,7 +659,7 @@ int main()
 		if(!p)
 		{
 			printf("内存分配故障！\n");
-			exit(0);//错误退出 
+			exit(0);//正常退出 
 		}
 		if(fread(p,sizeof(Node),1,fp)==1)//读取成功 
 		{
