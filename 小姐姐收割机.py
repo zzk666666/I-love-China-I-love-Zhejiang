@@ -17,16 +17,11 @@ id_list=html.xpath('.//img[@class="pic"]')
 #4.下载  下载保存
 for data in id_list:
     img=data.xpath('./@data-original')[0]
-    #print(img)
     img=img.split('?')[0]
     print(img)
     name=data.xpath('./@alt')[0]
-    #print(name)
-
     file = '虎牙美女文件夹/' + name +'.jpg'
     request.urlretrieve(img,file)
     requests.get(url)
-
     print('<%s>下载完成!'% name)
-
     time.sleep(1)
