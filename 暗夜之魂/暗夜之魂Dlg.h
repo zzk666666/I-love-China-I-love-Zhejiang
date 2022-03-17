@@ -1,4 +1,4 @@
-// ��ҹ֮��Dlg.h : header file
+// °µÒ¹Ö®»êDlg.h : header file
 //
 
 #if !defined(AFX_DLG_H__2B441415_9DBE_437C_9859_1D2FC3E2C70C__INCLUDED_)
@@ -16,6 +16,9 @@ class CMyDlg : public CDialog
 // Construction
 
 public:
+	BITMAP b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11;
+	CBitmap temp bm1 
+	CDC cdc1,cdc2,cdc3,cdc4,cdc5,cdc6,cdc7,cdc8,cdc9,cdc10,cdc11,cdc12;
 	CMyDlg(CWnd* pParent = NULL);	// standard constructor
 
 // Dialog Data
