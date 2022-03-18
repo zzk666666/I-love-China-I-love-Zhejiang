@@ -17,7 +17,7 @@ class CMyDlg : public CDialog
 
 public:
 	BITMAP b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11;
-	CBitmap temp bm1 
+	CBitmap temp bm1;
 	CDC cdc1,cdc2,cdc3,cdc4,cdc5,cdc6,cdc7,cdc8,cdc9,cdc10,cdc11,cdc12;
 	CMyDlg(CWnd* pParent = NULL);	// standard constructor
 
