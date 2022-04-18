@@ -13,6 +13,6 @@ while x<=1920:
     screen.blit(bgImg, (0, 0))
     screen.blit(user1,(x,y))
     screen.blit(user2, (500,500))
-    x += 8
     pygame.display.update()
+    x += 8
 pygame.quit()
