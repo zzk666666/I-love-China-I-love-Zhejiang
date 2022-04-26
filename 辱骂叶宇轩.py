@@ -33,7 +33,7 @@ if __name__=='__main__':
     t1=Thread(target=yyx1,args=(1,))
     t2 = Thread(target=yyx2, args=(2,))
     t3 = Thread(target=guangzhong, args=(1,))
-    print("大家好！这里是有薇姿德克士西八水冠名播出的有仇必报节目，我是主持人李天昊。")
+    print("大家好！这里是由薇姿德克士西八水冠名播出的有仇必报节目，我是主持人李天昊。")
     t1.setName(random.choice(team1))
     t2.setName(random.choice(team2))
     print(f"由请{t1.getName()}战队登场")
