@@ -28,8 +28,6 @@ for item in citymaps:
 
                 result.append(str(item2))
                 result.append(str(area['city'] + '市' + area['addr']))
-                #print('风险等级:%s,省：%s,具体位置：%s'%(str(area['grade']),str(item2),str(area['city']+area['addr'])))
-                #print(area['city']+area['addr'])
                 results.append(result)
                 if str(item2)=="上海":
                     sum+=1
@@ -39,7 +37,7 @@ for item in citymaps:
                     ShangHai.append(area['addr'])
 header = ['风险等级', '省份', '区域']
 header1 = ['更新时间：', updatetime['1']]
-filename = '全国最新风险等级区域' + time.strftime("%Y-%m-%d", time.localtime()) + '.csv'
+filename = '上海疫情最新风险等级区域' + time.strftime("%Y-%m-%d", time.localtime()) + '.csv'
 print(len(results))
 print(filename)
 print(f"上海风险区{sum}")
